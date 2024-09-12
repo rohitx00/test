@@ -52,7 +52,12 @@ const registerUser = asyncHandler( async(req,res) =>{
     }
 
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const converImageLocalPath = req.files?.coverImage[0]?.path;
+    // const converImageLocalPath = req.files?.coverImage[0]?.path;
+
+    let converImageLocalPath;
+    if(req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0){
+        converImageLocalPath = req.files.coverImage[0].path
+    }
 
     if(!avatarLocalPath){
 
@@ -97,7 +102,7 @@ const loginUser = asyncHandler(async (req, res) => {
     // send cookie
 
     const {email, username, password} = req.body
-    if(!username || !email){
+    if(!username && !email){
         throw new ApiError(400, "username or email is required")
     }
 
